@@ -17,5 +17,5 @@ Required
 
 
 Walkthrough
-![GIF Walkthrough](dropbox-clone.gif "Blogger Walkthrough")
+![GIF Walkthrough](blogger-walkthrough.gif "Blogger Walkthrough")
 
