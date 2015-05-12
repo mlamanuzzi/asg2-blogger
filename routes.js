@@ -93,17 +93,21 @@ module.exports = (app) => {
     // EDIT
     let post = await Post.promise.findById(postId)
     if (!post) res.send(404, 'Post Not Found')
-
-    // UPDATE
     let [{
       title: [title],
       content: [content]
     }, {
       image: [file]
     }] = await new multiparty.Form().promise.parse(req)
+
     post.title = title
     post.content = content
     post.updated = new Date().toLocaleString()
+    console.log(typeof image)
+    if (file.originalFilename != '') {
+      post.image.data = await fs.promise.readFile(file.path)
+      post.image.contentType = file.headers['content-type']
+    }
     await post.save()
     res.redirect('/blog/' + encodeURI(req.user.blogTitle))
     return
@@ -154,7 +158,8 @@ module.exports = (app) => {
         commentMessage.postId = postId
         await commentMessage.save()
 
-        // if user id = userid of post, redirect to profile, else redirect to same blog page
+        // if user id = userid of post, redirect to profile, 
+        // else redirect to same blog page
         let post = await Post.promise.findOne({
           _id:postId
         })
@@ -170,13 +175,11 @@ module.exports = (app) => {
   }))
 
   app.get('/delete/:deleteId?', isLoggedIn, then(async(req, res) => {
-    // TODO: is this the correct user?
     let deleteId = req.params.deleteId
-    Post.findOne({
-      _id: deleteId
-    }).remove().exec();
+    let deletePost = await Post.promise.findById(deleteId).remove().exec();
     // TODO: only redirect if successful 
     res.redirect('/profile')
+    return
   }))
 
   app.get('/profile', isLoggedIn, then(async(req, res) => {
