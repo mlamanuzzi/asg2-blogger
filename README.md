@@ -15,6 +15,8 @@ Required
 * [X] User can view a anyone's blog with posts and comments at the specified url
 * [X] Logged In users can comment on any blog post
 
+Although not shown in the walkthrough for space considerations, one blog can of
+course have many blog posts
 
 Walkthrough
 ![GIF Walkthrough](blogger-walkthrough.gif "Blogger Walkthrough")
